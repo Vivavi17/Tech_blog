@@ -2,6 +2,8 @@
 
 import uvicorn
 from fastapi import FastAPI
+from src.articles.router import comments_router, complaints_router, reviews_router, articles_router
+from src.users.router import router as users_router
 
 app = FastAPI()
 
@@ -11,6 +13,12 @@ async def ping() -> str:
     """Проверка доступности сервера"""
     return "ok"
 
+
+app.include_router(users_router)
+app.include_router(articles_router)
+app.include_router(comments_router)
+app.include_router(complaints_router)
+app.include_router(reviews_router)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)

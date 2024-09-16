@@ -6,7 +6,7 @@ from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 
-from src.common.database import Base
+from src.database import Base
 
 
 class Articles(Base):

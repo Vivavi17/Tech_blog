@@ -2,10 +2,10 @@
 
 from typing import Literal
 
-from sqlalchemy import String, Boolean
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.common.database import Base
+from src.database import Base
 
 
 class Users(Base):

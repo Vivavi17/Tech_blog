@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     PG_PORT: str
     PG_DATABASE: str
 
+    SECRET_KEY: str
+    ALGORITHM: str
 
     @property
     def DATABASE_URL(self) -> str:
