@@ -1,59 +1,38 @@
+from typing import Optional, Literal
+
 from fastapi import APIRouter, Depends
 
-from src.articles.schemas import NewArticleS, ArticlesS, NewCommentS, NewComplaintS, NewReviewsS
+from src.articles.schemas import NewArticleS, ArticlesS
+from src.articles.service import articles_service
 from src.users.models import Users
+from src.users.dependencies import check_user, check_admin
 
 articles_router = APIRouter(prefix="/articles", tags=['articles'])
-comments_router = APIRouter(prefix="/comments", tags=['comments'])
-complaints_router = APIRouter(prefix="/complaints", tags=['complaints'])
-reviews_router = APIRouter(prefix="/reviews", tags=['reviews'])
 
 
 @articles_router.post("")
-async def add_new_article(data: NewArticleS, user=Depends()):
-    return
+async def add_new_article(data: NewArticleS, user: Users = Depends(check_user)) -> ArticlesS:
+    return await articles_service.add_new_article(user.id, data.type, data.description)
 
 
 @articles_router.get("")
-async def get_articles(limit: int = 5, offset: int = 0) -> list[ArticlesS]:
-    return
+async def get_articles(articles_type: Optional[str] = None, author_id: Optional[str] = None,
+                       order_by: Optional[Literal["author_id", "type", "crated_at"]] = None, limit: int = 5,
+                       offset: int = 0,
+                       user: Users = Depends(check_user)) -> list[ArticlesS]:
+    return await articles_service.get_articles(articles_type, author_id, limit, offset, order_by)
 
 
 @articles_router.get("/{article_id}")
-async def get_article(article_id: int) -> ArticlesS:
-    return
+async def get_article(article_id: int) -> Optional[ArticlesS]:
+    return await articles_service.get_article(article_id)
 
 
 @articles_router.delete("/{article_id}")
-async def del_article(article_id: int, user: Users = Depends()) -> ArticlesS:
-    return
+async def del_article(article_id: int, user: Users = Depends(check_user)) -> None:
+    return await articles_service.del_article(article_id, user.id)
 
 
 @articles_router.patch("/{article_id}")
-async def set_type(article_id: int, article_type: str):
-    return
-
-
-@comments_router.post("/{article_id}")
-async def add_comment(article_id: int, data: NewCommentS, user: Users = Depends()):
-    return
-
-
-@comments_router.delete("/{comment_id}")
-async def del_article(comment_id: int, admin: Users =Depends()):
-    return
-
-
-@complaints_router.get("")
-async def get_complaints(admin: Users =Depends()):
-    return
-
-
-@complaints_router.post("/{article_id}")
-async def add_complaint(data: NewComplaintS, user: Users =Depends()):
-    return
-
-
-@reviews_router.post("/{article_id}")
-async def add_review(data: NewReviewsS, user=Depends()):
-    return
+async def set_type(article_id: int, article_type: str, user: Users = Depends(check_user)) -> ArticlesS:
+    return articles_service.set_type(article_id, article_type, user)

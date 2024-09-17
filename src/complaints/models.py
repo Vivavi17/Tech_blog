@@ -1,22 +1,19 @@
-"""Модель для работы со статьями"""
-
 import datetime
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import ForeignKey, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.sql import func
 
 from src.database import Base
 
 
-class Articles(Base):
-    """Модель контекста статей"""
+class Complaints(Base):
+    """Модель контекста жалоб"""
 
-    __tablename__ = "articles"
+    __tablename__ = "complaints"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    type: Mapped[str]
+    article_id: Mapped[int] = mapped_column(ForeignKey("articles.id"))
     description: Mapped[str]
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

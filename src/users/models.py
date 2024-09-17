@@ -16,5 +16,5 @@ class Users(Base):
     username: Mapped[str] = mapped_column(String(20))
     email: Mapped[str]
     hashed_password: Mapped[str]
-    status: Mapped[Literal["User", "Admin"]]
-    ban: Mapped[bool]
+    status: Mapped[Literal["User", "Admin"]] = mapped_column(default="User")
+    ban: Mapped[bool] = mapped_column(default=False)

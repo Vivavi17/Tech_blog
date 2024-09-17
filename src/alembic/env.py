@@ -7,7 +7,10 @@ from alembic import context
 
 from src.config import settings
 from src.database import Base
-from src.articles.models import Articles, Complaints, Comments, Reviews # noqa
+from src.articles.models import Articles  # noqa
+from src.reviews.models import Reviews # noqa
+from src.complaints.models import Complaints # noqa
+from src.comments.models import Comments # noqa
 from src.users.models import Users # noqa
 
 # this is the Alembic Config object, which provides
