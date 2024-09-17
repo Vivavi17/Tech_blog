@@ -15,18 +15,28 @@ class ArticlesService:
             cls.singleton = super().__new__(cls, *args, **kwargs)
         return cls.singleton
 
-    async def add_new_article(self, user_id: str, type: str, description: str):
+    async def add_new_article(self, user_id: int, type: str, description: str):
         return await self.dao.add(author_id=user_id, type=type, description=description)
 
     async def get_article(self, article_id: int) -> Articles:
         return await self.dao.find_one_or_none(id=article_id)
 
-    async def get_articles(self, articles_type: Optional[str], author_id: Optional[str], limit: int, offset: int,
-                           order_by: str):
-        filter_by = {k: v for k, v in [["type", articles_type], ["author_id", author_id]] if v is not None}
+    async def get_articles(
+        self,
+        articles_type: Optional[str],
+        author_id: Optional[int],
+        limit: int,
+        offset: int,
+        order_by: str,
+    ):
+        filter_by = {
+            k: v
+            for k, v in [["type", articles_type], ["author_id", author_id]]
+            if v is not None
+        }
         return await self.dao.find_all(limit, offset, order_by, **filter_by)
 
-    async def del_article(self, article_id, user_id):
+    async def del_article(self, article_id: int, user_id: int):
         article = await self.dao.find_one_or_none(id=article_id)
         if not article:
             raise ArticleNotFoundException
@@ -34,7 +44,7 @@ class ArticlesService:
             raise UserRightsException
         await self.dao.delete(id=article_id)
 
-    async def set_type(self, article_id:int, article_type:str, user: Users):
+    async def set_type(self, article_id: int, article_type: str, user: Users):
         article = await self.dao.find_one_or_none(id=article_id)
         if not article:
             raise ArticleNotFoundException

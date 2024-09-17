@@ -44,11 +44,19 @@ class TokenAbsentException(BlogExceptions):
     detail = "Токен отсутствует"
 
 
+class TokenExpiredException(BlogExceptions):
+    """Ошибка токена"""
+
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Срок действия токена истек"
+
+
 class IncorrectTokenFormatException(BlogExceptions):
     """Ошибка токена"""
 
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Неверный формат токена"
+
 
 class ArticleNotFoundException(BlogExceptions):
     """Ошибка доступа статьи"""

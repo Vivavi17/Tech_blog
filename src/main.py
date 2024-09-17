@@ -2,10 +2,11 @@
 
 import uvicorn
 from fastapi import FastAPI
+
 from src.articles.router import articles_router
-from src.reviews.router import reviews_router
-from src.complaints.router import complaints_router
 from src.comments.router import comments_router
+from src.complaints.router import complaints_router
+from src.reviews.router import reviews_router
 from src.users.router import router as users_router
 
 app = FastAPI()

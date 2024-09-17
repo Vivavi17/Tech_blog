@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Response
+
 from src.users.dependencies import check_admin
 from src.users.models import Users
 from src.users.schemas import UsersAuthS, UsersLoginS
 from src.users.service import users_service
 
-router = APIRouter(prefix="/users", tags=['users'])
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/register", status_code=201)

@@ -1,9 +1,11 @@
-from fastapi import Response, Depends, Request
-from src.users.auth import get_hashed_pwd, verify_pwd, create_access_token
-from src.users.dao import UsersDAO
-from src.exceptions import UserAlreadyExistsException, IncorrectLoginOrPasswordException, UserDoesntExistsException
+from fastapi import Depends, Request, Response
 from pydantic import EmailStr
 
+from src.exceptions import (IncorrectLoginOrPasswordException,
+                            UserAlreadyExistsException,
+                            UserDoesntExistsException)
+from src.users.auth import create_access_token, get_hashed_pwd, verify_pwd
+from src.users.dao import UsersDAO
 from src.users.models import Users
 
 
@@ -21,7 +23,9 @@ class UsersService:
         if is_exist:
             raise UserAlreadyExistsException
         hashed_password = get_hashed_pwd(password)
-        await self.dao.add(username=username, email=email, hashed_password=hashed_password)
+        await self.dao.add(
+            username=username, email=email, hashed_password=hashed_password
+        )
 
     async def login(self, response: Response, email: EmailStr, password: str) -> str:
         user = await self.dao.find_one_or_none(email=email)

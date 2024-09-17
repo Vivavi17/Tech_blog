@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from src.articles.schemas import NewReviewsS
+from src.reviews.schemas import NewReviewsS
 
-reviews_router = APIRouter(prefix="/reviews", tags=['reviews'])
+reviews_router = APIRouter(prefix="/reviews", tags=["reviews"])
 
 
 @reviews_router.post("/{article_id}")
