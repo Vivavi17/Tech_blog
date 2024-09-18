@@ -24,5 +24,6 @@ app.include_router(comments_router)
 app.include_router(complaints_router)
 app.include_router(reviews_router)
 
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)

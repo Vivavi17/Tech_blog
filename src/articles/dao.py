@@ -1,3 +1,5 @@
+"""модуль для работы с таблицей статей"""
+
 from sqlalchemy import select
 
 from src.articles.models import Articles
@@ -6,6 +8,8 @@ from src.database import async_session_maker
 
 
 class ArticlesDAO(BaseDAO):
+    """Класс с запросами в таблицу статей"""
+
     model = Articles
 
     @classmethod

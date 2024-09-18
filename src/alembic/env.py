@@ -1,6 +1,10 @@
+import sys
 from logging.config import fileConfig
+from os.path import abspath, dirname
 
 from sqlalchemy import engine_from_config, pool
+
+sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
 from alembic import context
 from src.articles.models import Articles  # noqa

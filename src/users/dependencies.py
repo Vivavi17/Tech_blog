@@ -1,4 +1,4 @@
-from datetime import datetime
+"""Модуль релизации зависимостей"""
 
 from fastapi import Depends, Request
 from jose import ExpiredSignatureError, jwt
@@ -6,11 +6,13 @@ from jose import ExpiredSignatureError, jwt
 from src.config import settings
 from src.exceptions import (IncorrectTokenFormatException,
                             TokenAbsentException, TokenExpiredException,
-                            UserDoesntExistsException, UserRightsException)
+                            UserBannnedException, UserDoesntExistsException,
+                            UserRightsException)
 from src.users.dao import UsersDAO
 
 
 async def get_token(request: Request) -> str:
+    """Получить токен"""
     token = request.cookies.get("tech_blog")
     if not token:
         raise TokenAbsentException
@@ -18,6 +20,7 @@ async def get_token(request: Request) -> str:
 
 
 async def check(access_token: str, status=None):
+    """Проверка токена пользователей"""
     try:
         payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
     except ExpiredSignatureError:
@@ -28,16 +31,17 @@ async def check(access_token: str, status=None):
     if not user:
         raise UserDoesntExistsException
     if user.ban:
-        raise UserRightsException
+        raise UserBannnedException
     if status and status != user.status:
-        raise UserDoesntExistsException
+        raise UserRightsException
     return user
 
 
 async def check_admin(access_token: str = Depends(get_token)):
+    """Проверка админа"""
     return await check(access_token, "Admin")
 
 
 async def check_user(access_token: str = Depends(get_token)):
-    print("CHECK")
+    """Проверка пользователя"""
     return await check(access_token)

@@ -1,0 +1,692 @@
+openapi: 3.0.1
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  /ping:
+    get:
+      summary: Ping
+      description: Проверка доступности сервера
+      operationId: ping_ping_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: string
+                title: Response Ping Ping Get
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Register
+      description: Создание учетной записи пользователя
+      operationId: register_users_register_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersAuthS'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Login
+      description: Вход пользователя по логину и паролю, пользователь получает токен доступа
+      operationId: login_users_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersLoginS'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: string
+                title: Response Login Users Login Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /users/admins/{user_id}:
+    post:
+      tags:
+        - users
+      summary: Set Status
+      description: Изменить статус пользователя, по дефолту только сделать админом
+      operationId: set_status_users_admins__user_id__post
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /users/ban/{user_id}:
+    post:
+      tags:
+        - users
+      summary: Set Ban
+      description: Забанить/разбанить пользователя
+      operationId: set_ban_users_ban__user_id__post
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: User Id
+        - name: ban
+          in: query
+          required: true
+          schema:
+            type: boolean
+            title: Ban
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Logout
+      description: Выйти из учетной записи
+      operationId: logout_users_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /articles:
+    post:
+      tags:
+        - articles
+      summary: Add New Article
+      description: Добавить новую статью
+      operationId: add_new_article_articles_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewArticleS'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlesS'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+        - articles
+      summary: Get Articles
+      description: Получить список статей с пагинацией, фильтром и сортировкой
+      operationId: get_articles_articles_get
+      parameters:
+        - name: articles_type
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Articles Type
+        - name: author_id
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: integer
+            title: Author Id
+        - name: order_by
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - enum:
+                  - author_id
+                  - type
+                  - crated_at
+                type: string
+            title: Order By
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+            title: Limit
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticlesS'
+                title: Response Get Articles Articles Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /articles/{article_id}:
+    get:
+      tags:
+        - articles
+      summary: Get Article
+      description: Прочитать одну статью по id
+      operationId: get_article_articles__article_id__get
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/ArticlesS'
+                title: Response Get Article Articles  Article Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+        - articles
+      summary: Del Article
+      description: Удалить статью (доступно только авторам статьи)
+      operationId: del_article_articles__article_id__delete
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+        - articles
+      summary: Set Type
+      description: Изменить тип статьи (доступно АДМ и автору)
+      operationId: set_type_articles__article_id__patch
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+        - name: article_type
+          in: query
+          required: true
+          schema:
+            type: string
+            title: Article Type
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticlesS'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /comments/{article_id}:
+    post:
+      tags:
+        - comments
+      summary: Add Comment
+      description: Добавить комментарий
+      operationId: add_comment_comments__article_id__post
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCommentS'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentS'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /comments/{comment_id}:
+    delete:
+      tags:
+        - comments
+      summary: Del Comments
+      description: Удалить комментарий (админом)
+      operationId: del_comments_comments__comment_id__delete
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Comment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /complaints:
+    get:
+      tags:
+        - complaints
+      summary: Get Complaints
+      description: Получить список жалоб (для АДМ)
+      operationId: get_complaints_complaints_get
+      parameters:
+        - name: article_id
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Article Id
+        - name: author_id
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: string
+            title: Author Id
+        - name: order_by
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - enum:
+                  - author_id
+                  - article_id
+                  - crated_at
+                type: string
+            title: Order By
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+            title: Limit
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+            title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComplaintS'
+                title: Response Get Complaints Complaints Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /complaints/{article_id}:
+    post:
+      tags:
+        - complaints
+      summary: Add Complaint
+      description: Добавить жалобу
+      operationId: add_complaint_complaints__article_id__post
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewComplaintS'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplaintS'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /reviews/{article_id}:
+    post:
+      tags:
+        - reviews
+      summary: Add Review
+      description: Добавить отзыв нв статью
+      operationId: add_review_reviews__article_id__post
+      parameters:
+        - name: article_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Article Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewReviewsS'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsS'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ArticlesS:
+      properties:
+        id:
+          type: integer
+          title: Id
+        type:
+          type: string
+          title: Type
+        description:
+          type: string
+          title: Description
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+        - id
+        - type
+        - description
+        - created_at
+      title: ArticlesS
+      description: Валидация отправки статей
+    CommentS:
+      properties:
+        author_id:
+          type: integer
+          title: Author Id
+        article_id:
+          type: integer
+          title: Article Id
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - author_id
+        - article_id
+        - description
+      title: CommentS
+      description: Валидация на полуцчение комментариев
+    ComplaintS:
+      properties:
+        author_id:
+          type: integer
+          title: Author Id
+        article_id:
+          type: integer
+          title: Article Id
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - author_id
+        - article_id
+        - description
+      title: ComplaintS
+      description: Валидация при просмотре жалоб
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    NewArticleS:
+      properties:
+        type:
+          type: string
+          title: Type
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - type
+        - description
+      title: NewArticleS
+      description: Валидация при создании новой статьи
+    NewCommentS:
+      properties:
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - description
+      title: NewCommentS
+      description: Валидация на новый комментарий
+    NewComplaintS:
+      properties:
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - description
+      title: NewComplaintS
+      description: Валидация при создании жалоб
+    NewReviewsS:
+      properties:
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - description
+      title: NewReviewsS
+      description: Валидация при добавлении нового отзыва
+    ReviewsS:
+      properties:
+        author_id:
+          type: integer
+          title: Author Id
+        article_id:
+          type: integer
+          title: Article Id
+        description:
+          type: string
+          title: Description
+      type: object
+      required:
+        - author_id
+        - article_id
+        - description
+      title: ReviewsS
+      description: Валидация отзыва
+    UsersAuthS:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+        username:
+          type: string
+          maxLength: 20
+          title: Username
+      type: object
+      required:
+        - email
+        - password
+        - username
+      title: UsersAuthS
+      description: Валидация регистрации пользователя
+    UsersLoginS:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+        - email
+        - password
+      title: UsersLoginS
+      description: Валидация для входа в учетную запись
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError

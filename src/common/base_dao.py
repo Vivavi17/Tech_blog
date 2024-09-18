@@ -1,9 +1,13 @@
+"""Модуль с родительским классом ДАО"""
+
 from sqlalchemy import delete, insert, select, update
 
 from src.database import async_session_maker
 
 
 class BaseDAO:
+    """Базовый интерфейс CRUD в таблицу"""
+
     model = None
 
     @classmethod

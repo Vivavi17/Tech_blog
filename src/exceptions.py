@@ -3,7 +3,6 @@ from fastapi import HTTPException, status
 
 class BlogExceptions(HTTPException):
     """Базовый класс ошибок"""
-
     status_code = 500
     detail = ""
 
@@ -22,12 +21,21 @@ class UserDoesntExistsException(BlogExceptions):
     """Ошибка доступа пользователя"""
 
     status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "Пользователь не найден"
+
+
+class UserBannnedException(BlogExceptions):
+    """Ошибка доступа пользователя"""
+
+    status_code = status.HTTP_403_FORBIDDEN
+    detail = "Пользователь заблокирован"
 
 
 class UserRightsException(BlogExceptions):
     """Ошибка доступа пользователя"""
 
     status_code = status.HTTP_403_FORBIDDEN
+    detail = "Пользователь не имеет прав"
 
 
 class IncorrectLoginOrPasswordException(BlogExceptions):

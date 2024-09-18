@@ -1,16 +1,16 @@
+"""Модуль с бизнес-логикой жалоб"""
+
 from typing import Optional
 
+from src.articles.service import articles_service
+from src.common.singleton import Singleton
 from src.complaints.dao import ComplaintsDAO
 
 
-class ComplaintsService:
-    singleton = None
-    dao = ComplaintsDAO
+class ComplaintsService(Singleton):
+    """Класс работы с жалобами"""
 
-    def __new__(cls, *args, **kwargs):
-        if not cls.singleton:
-            cls.singleton = super().__new__(cls, *args, **kwargs)
-        return cls.singleton
+    dao = ComplaintsDAO
 
     async def get_complaints(
         self,
@@ -20,6 +20,7 @@ class ComplaintsService:
         offset: int,
         order_by: str,
     ):
+        """Получить список жалоб"""
         filter_by = {
             k: v
             for k, v in [["article_id", article_id], ["author_id", author_id]]
@@ -28,6 +29,8 @@ class ComplaintsService:
         return await self.dao.find_all(limit, offset, order_by, **filter_by)
 
     async def add_new_complaint(self, user_id: int, article_id: int, description: str):
+        """Добавить жалобу"""
+        await articles_service.find_article(id=article_id)
         return await self.dao.add(
             author_id=user_id, article_id=article_id, description=description
         )

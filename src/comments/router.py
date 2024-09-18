@@ -1,3 +1,5 @@
+"""Модуль роутера комментариев"""
+
 from fastapi import APIRouter, Depends
 
 from src.comments.schemas import CommentS, NewCommentS
@@ -12,9 +14,11 @@ comments_router = APIRouter(prefix="/comments", tags=["comments"])
 async def add_comment(
     article_id: int, data: NewCommentS, user: Users = Depends(check_user)
 ) -> CommentS:
+    """Добавить комментарий"""
     return await comments_service.add_new_comment(user.id, article_id, data.description)
 
 
-@comments_router.delete("/{comment_id}")
-async def del_comments(comment_id: int, admin: Users = Depends(check_admin)):
-    return await comments_service.del_article(comment_id)
+@comments_router.delete("/{comment_id}", dependencies=[Depends(check_admin)])
+async def del_comments(comment_id: int) -> None:
+    """Удалить комментарий (админом)"""
+    return await comments_service.del_comment(comment_id)
