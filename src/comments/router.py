@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from src.comments.schemas import CommentS, NewCommentS
 from src.comments.service import comments_service
-from src.users.dependencies import check_admin, check_user
+from src.users.jwt_dependencies import check_admin, check_user
 from src.users.models import Users
 
 comments_router = APIRouter(prefix="/comments", tags=["comments"])

@@ -4,7 +4,7 @@ from typing import Optional
 
 from src.articles.dao import ArticlesDAO
 from src.articles.models import Articles
-from src.common.singleton import Singleton
+from src.base.singleton import Singleton
 from src.exceptions import ArticleNotFoundException, UserRightsException
 from src.users.models import Users
 
@@ -14,9 +14,11 @@ class ArticlesService(Singleton):
 
     dao = ArticlesDAO
 
-    async def add_new_article(self, user_id: int, type: str, description: str):
+    async def add_new_article(self, user_id: int, article_type: str, description: str):
         """Добавить новую статью"""
-        return await self.dao.add(author_id=user_id, type=type, description=description)
+        return await self.dao.add(
+            author_id=user_id, type=article_type, description=description
+        )
 
     async def get_article(self, article_id: int) -> Articles:
         """Получить новую статью по артиклю"""

@@ -1,8 +1,8 @@
 """Бизнес-логика работы комментариев"""
 
 from src.articles.service import articles_service
+from src.base.singleton import Singleton
 from src.comments.dao import CommentsDAO
-from src.common.singleton import Singleton
 
 
 class CommentsService(Singleton):

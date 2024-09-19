@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 
 from src.articles.schemas import ArticlesS, NewArticleS
 from src.articles.service import articles_service
-from src.users.dependencies import check_user
+from src.users.jwt_dependencies import check_user
 from src.users.models import Users
 
 articles_router = APIRouter(prefix="/articles", tags=["articles"])
@@ -34,10 +34,8 @@ async def get_articles(
     )
 
 
-@articles_router.get("/{article_id}")
-async def get_article(
-    article_id: int, user: Users = Depends(check_user)
-) -> Optional[ArticlesS]:
+@articles_router.get("/{article_id}", dependencies=[Depends(check_user)])
+async def get_article(article_id: int) -> Optional[ArticlesS]:
     """Прочитать одну статью по id"""
     return await articles_service.get_article(article_id)
 

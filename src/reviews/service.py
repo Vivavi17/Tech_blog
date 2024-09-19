@@ -1,11 +1,11 @@
 """Бизнес-логика работы отзывов"""
 
 from src.articles.service import articles_service
-from src.common.singleton import Singleton
+from src.base.singleton import Singleton
 from src.reviews.dao import ReviewsDAO
 
 
-class ReviewsService(Singleton):
+class ReviewsService(Singleton):  # pylint: disable=too-few-public-methods
     """Логика работы с отзывами"""
 
     dao = ReviewsDAO

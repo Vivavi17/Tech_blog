@@ -23,8 +23,8 @@ async def check(access_token: str, status=None):
     """Проверка токена пользователей"""
     try:
         payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-    except ExpiredSignatureError:
-        raise TokenExpiredException
+    except ExpiredSignatureError as exp_error:
+        raise TokenExpiredException from exp_error
     if not (user_id := payload.get("sub")):
         raise IncorrectTokenFormatException
     user = await UsersDAO.find_one_or_none(id=int(user_id))

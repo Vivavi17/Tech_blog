@@ -19,12 +19,18 @@ class BaseDAO:
             return result.mappings().one_or_none()
 
     @classmethod
-    async def find_all(cls, **filter_by):
-        """Поиск всех записей по фильтру"""
+    async def find_all(cls, limit=None, offset=None, order_by=None, **filter_by):
+        """Получение статей с фильтрацией и пагинацией"""
         async with async_session_maker() as session:
-            query = select(cls.model.__table__.columns).filter_by(**filter_by)
+            query = (
+                select(cls.model.__table__)
+                .filter_by(**filter_by)
+                .order_by(order_by)
+                .offset(offset)
+                .limit(limit)
+            )
             result = await session.execute(query)
-            return result.mappings().all()
+        return result.mappings().all()
 
     @classmethod
     async def add(cls, **data):

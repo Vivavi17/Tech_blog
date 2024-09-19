@@ -3,7 +3,7 @@
 from fastapi import Response
 from pydantic import EmailStr
 
-from src.common.singleton import Singleton
+from src.base.singleton import Singleton
 from src.exceptions import (IncorrectLoginOrPasswordException,
                             UserAlreadyExistsException, UserBannnedException,
                             UserDoesntExistsException)
@@ -34,7 +34,10 @@ class UsersService(Singleton):
             status = "Admin"
         hashed_password = get_hashed_pwd(password)
         await self.dao.add(
-            username=username, email=email, hashed_password=hashed_password, status=status
+            username=username,
+            email=email,
+            hashed_password=hashed_password,
+            status=status,
         )
 
     async def login(self, response: Response, email: EmailStr, password: str) -> str:

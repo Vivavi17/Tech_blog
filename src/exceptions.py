@@ -1,8 +1,11 @@
+"""Модуль с кастомными ошибками сервиса"""
+
 from fastapi import HTTPException, status
 
 
 class BlogExceptions(HTTPException):
     """Базовый класс ошибок"""
+
     status_code = 500
     detail = ""
 

@@ -2,8 +2,7 @@
 
 from fastapi import APIRouter, Depends, Response
 
-from src.users.dependencies import check_admin
-from src.users.models import Users
+from src.users.jwt_dependencies import check_admin
 from src.users.schemas import UsersAuthS, UsersLoginS
 from src.users.service import users_service
 
@@ -28,8 +27,8 @@ async def set_status(user_id: int) -> None:
     return await users_service.set_status(user_id, status="Admin")
 
 
-@router.post("/ban/{user_id}")
-async def set_ban(user_id: int, ban: bool, admin: Users = Depends(check_admin)) -> None:
+@router.post("/ban/{user_id}", dependencies=[Depends(check_admin)])
+async def set_ban(user_id: int, ban: bool) -> None:
     """Забанить/разбанить пользователя"""
     return await users_service.set_ban(user_id, ban)
 

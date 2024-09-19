@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 
 from src.complaints.schemas import ComplaintS, NewComplaintS
 from src.complaints.service import complaints_service
-from src.users.dependencies import check_admin, check_user
+from src.users.jwt_dependencies import check_admin, check_user
 from src.users.models import Users
 
 complaints_router = APIRouter(prefix="/complaints", tags=["complaints"])

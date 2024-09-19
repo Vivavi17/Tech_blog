@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 
 from src.reviews.schemas import NewReviewsS, ReviewsS
 from src.reviews.service import reviews_service
-from src.users.dependencies import check_user
+from src.users.jwt_dependencies import check_user
 
 reviews_router = APIRouter(prefix="/reviews", tags=["reviews"])
 

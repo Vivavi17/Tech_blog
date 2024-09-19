@@ -1,10 +1,10 @@
 """Модуль для работы с таблицей комментариев"""
 
+from src.base.base_dao import BaseDAO
 from src.comments.models import Comments
-from src.common.base_dao import BaseDAO
 
 
-class CommentsDAO(BaseDAO):
+class CommentsDAO(BaseDAO):  # pylint: disable=too-few-public-methods
     """Класс для работы с таблицей комментариев"""
 
     model = Comments

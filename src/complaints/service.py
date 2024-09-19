@@ -3,7 +3,7 @@
 from typing import Optional
 
 from src.articles.service import articles_service
-from src.common.singleton import Singleton
+from src.base.singleton import Singleton
 from src.complaints.dao import ComplaintsDAO
 
 

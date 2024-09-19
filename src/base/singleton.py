@@ -1,7 +1,7 @@
 """Модуль класса Singleton"""
 
 
-class Singleton:
+class Singleton:  # pylint: disable=too-few-public-methods
     """Класс с единственным экземпляром"""
 
     singleton = None

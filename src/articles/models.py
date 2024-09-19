@@ -12,7 +12,7 @@ from src.database import Base
 from src.reviews.models import Reviews
 
 
-class Articles(Base):
+class Articles(Base):  # pylint: disable=too-few-public-methods
     """Модель контекста статей"""
 
     __tablename__ = "articles"
@@ -22,7 +22,8 @@ class Articles(Base):
     type: Mapped[str]
     description: Mapped[str]
     created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True),
+        server_default=func.now(),  # pylint: disable=not-callable
     )
     comments: Mapped["Comments"] = relationship(
         "Comments", back_populates="article", cascade="all, delete-orphan"
