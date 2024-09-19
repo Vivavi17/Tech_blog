@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from src.articles.router import articles_router
 from src.comments.router import comments_router
 from src.complaints.router import complaints_router
+from src.config import settings
 from src.reviews.router import reviews_router
 from src.users.router import router as users_router
 
@@ -26,4 +27,4 @@ app.include_router(reviews_router)
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run("main:app", host=settings.UVICORN_HOST, port=settings.UVICORN_PORT, reload=True)

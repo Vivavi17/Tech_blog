@@ -24,4 +24,7 @@ clean:
 	docker stop $(shell docker ps -q --filter ancestor=tech_blog_app ) 2>/dev/null || true
 	docker rm $(shell docker ps -a -q --filter "ancestor=tech_blog_app") 2>/dev/null || true
 
+clean_volumes:
+	docker volume ls -q | xargs docker volume rm
+
 rebuild: clean build

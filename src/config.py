@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     PG_PORT: str
     PG_DATABASE: str
 
+    UVICORN_HOST: str
+    UVICORN_PORT: int
+
     SECRET_KEY: str
     ALGORITHM: str
     TOKEN_EXP_MIN: int
