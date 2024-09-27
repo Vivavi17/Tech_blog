@@ -5,7 +5,7 @@ from pydantic import EmailStr
 
 from src.base.singleton import Singleton
 from src.exceptions import (IncorrectLoginOrPasswordException,
-                            UserAlreadyExistsException, UserBannnedException,
+                            UserAlreadyExistsException, UserBannedException,
                             UserDoesntExistsException)
 from src.users.auth import create_access_token, get_hashed_pwd, verify_pwd
 from src.users.dao import UsersDAO
@@ -46,7 +46,7 @@ class UsersService(Singleton):
         if not verify_pwd(password, user.hashed_password):
             raise IncorrectLoginOrPasswordException
         if user.ban:
-            raise UserBannnedException
+            raise UserBannedException
         access_token = create_access_token({"sub": str(user.id), "status": user.status})
         response.set_cookie("tech_blog", access_token, httponly=True)
         return access_token

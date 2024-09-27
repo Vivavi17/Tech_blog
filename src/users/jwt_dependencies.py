@@ -6,7 +6,7 @@ from jose import ExpiredSignatureError, jwt
 from src.config import settings
 from src.exceptions import (IncorrectTokenFormatException,
                             TokenAbsentException, TokenExpiredException,
-                            UserBannnedException, UserDoesntExistsException,
+                            UserBannedException, UserDoesntExistsException,
                             UserRightsException)
 from src.users.dao import UsersDAO
 
@@ -31,7 +31,7 @@ async def check(access_token: str, status=None):
     if not user:
         raise UserDoesntExistsException
     if user.ban:
-        raise UserBannnedException
+        raise UserBannedException
     if status and status != user.status:
         raise UserRightsException
     return user

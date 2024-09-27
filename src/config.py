@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:  # pylint: disable=invalid-name
-        """URL для синхронного подключения к БД"""
+        """URL для асинхронного подключения к БД"""
         return f"postgresql+asyncpg://{self.PG_USERNAME}:{self.PG_PASSWORD}@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DATABASE}"  # pylint: disable=line-too-long
 
     model_config = SettingsConfigDict(env_file=".env", env_prefix="APP_")

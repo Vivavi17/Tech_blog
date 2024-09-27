@@ -15,7 +15,7 @@ app = FastAPI()
 
 @app.get("/ping")
 async def ping() -> str:
-    """Проверка доступности сервера"""
+    """Проверка доступности сервиса"""
     return "ok"
 
 

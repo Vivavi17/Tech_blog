@@ -27,7 +27,7 @@ class UserDoesntExistsException(BlogExceptions):
     detail = "Пользователь не найден"
 
 
-class UserBannnedException(BlogExceptions):
+class UserBannedException(BlogExceptions):
     """Ошибка доступа пользователя"""
 
     status_code = status.HTTP_403_FORBIDDEN
